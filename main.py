@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(title="PlayerAuth Service", description="Gestionează autentificarea și JWT (RBAC)")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # În producție aici s-ar pune domeniul de frontend
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -21,7 +21,7 @@ class LoginRequest(BaseModel):
     username: str
     password: str
 
-# Baza de date simulată pentru utilizatori și rolurile lor
+# Baza de date pentru utilizatori și rolurile lor
 USERS_DB = {
     "arbitru1": {"password": "parola123", "role": "arbitru"},
     "spectator1": {"password": "parola123", "role": "spectator"}
@@ -38,7 +38,7 @@ def login(request: LoginRequest):
     if not user or user["password"] != request.password:
         raise HTTPException(status_code=401, detail="Credențiale incorecte")
         
-    # Generăm token-ul introducând ROLUL utilizatorului în interiorul său (Payload)
+    # Generam token-ul
     payload = {
         "sub": request.username,
         "role": user["role"],
